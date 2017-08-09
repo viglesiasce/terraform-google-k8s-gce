@@ -28,6 +28,13 @@ node-tags = ${tags}
 node-instance-prefix = ${instance_prefix}
 EOF
 
+# Drop in to perform cleanup when kubelet stops.
+cat >/etc/systemd/system/kubelet.service.d/30-shutdown.conf <<EOF
+[Service]
+ExecStop=/bin/bash /etc/kubernetes/shutdown.sh
+EOF
+systemctl daemon-reload
+
 cat <<'EOF' > /etc/kubernetes/shutdown.sh
 #!/bin/bash
 [[ ! -e /etc/kubernetes/admin.conf ]] && exit 0
@@ -44,6 +51,7 @@ NODES=$(kubectl $KCFG get nodes --output=jsonpath={.items..metadata.name})
 kubectl $KCFG delete node $NODES
 sleep 30
 EOF
+chmod +x /etc/kubernetes/shutdown.sh
 
 kubeadm init --config /etc/kubernetes/kubeadm.conf
 

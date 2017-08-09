@@ -108,6 +108,7 @@ module "master-mig" {
   zone              = "${var.zone}"
   network           = "${var.network}"
   network_ip        = "${var.master_ip}"
+  access_config     = "${var.access_config}"
   can_ip_forward    = true
   size              = 1
   compute_image     = "${var.compute_image}"
@@ -121,8 +122,7 @@ module "master-mig" {
     user-data-encoding = "base64"
   }
 
-  // run shutdown script to ensure routes and fw rules are cleaned up by the kube-controller.
-  local_cmd_destroy = "gcloud compute ssh $(gcloud compute instances list --filter='networkInterfaces[0].networkIP=${var.master_ip}' --format='csv[no-heading](name)') --command 'sudo bash /etc/kubernetes/shutdown.sh' || true"
+  depends_id = "${var.depends_id}"
 }
 
 module "default-pool-mig" {
@@ -131,6 +131,7 @@ module "default-pool-mig" {
   region            = "${var.region}"
   zone              = "${var.zone}"
   network           = "${var.network}"
+  access_config     = "${var.access_config}"
   can_ip_forward    = true
   size              = "${var.num_nodes}"
   compute_image     = "${var.compute_image}"
@@ -143,4 +144,6 @@ module "default-pool-mig" {
     user-data          = "${data.template_cloudinit_config.node.rendered}"
     user-data-encoding = "base64"
   }
+
+  depends_id = "${var.depends_id}"
 }

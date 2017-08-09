@@ -24,7 +24,7 @@ variable compute_image {
 
 variable network {
   description = "The network to deploy to"
-  default = "default"
+  default     = "default"
 }
 
 variable region {
@@ -35,6 +35,12 @@ variable region {
 variable zone {
   description = "The zone to create the cluster in."
   default     = "us-central1-f"
+}
+
+variable access_config {
+  description = "The access config block for the instances. Set to [] to remove external IP."
+  type        = "list"
+  default     = [{}]
 }
 
 variable master_machine_type {
@@ -60,20 +66,25 @@ variable add_tags {
 
 variable master_ip {
   description = "The internal IP of the master node. Note this must be in the CIDR range of the region and zone."
-  default = "10.128.0.10"
+  default     = "10.128.0.10"
 }
 
 variable pod_cidr {
   description = "The CIDR for the pod network. The master will allocate a portion of this subnet for each node."
-  default = "10.12.0.0/14"
+  default     = "10.42.0.0/14"
 }
 
 variable service_cidr {
   description = "The CIDR for the service network"
-  default = "10.15.240.0/20"
+  default     = "10.25.240.0/20"
 }
 
 variable dns_ip {
   description = "The IP of the kube DNS service, must live within the service_cidr."
-  default = "10.15.240.10"
+  default     = "10.25.240.10"
+}
+
+variable depends_id {
+  description = "The ID of a resource that the instance group depends on."
+  default     = ""
 }

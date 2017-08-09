@@ -26,6 +26,7 @@ module "k8s" {
 - `network` (optional): The network to deploy to. Default is `default`.
 - `region` (optional): The region to create the cluster in. Default is `us-central1`
 - `zone` (optional): The zone to create the cluster in.. Default is `us-central1-f`.
+- `access_config` (optiona): The access config block for the instances. Set to `[]` to remove external IP. Default is `[{}]`
 - `master_machine_type` (optional): The machine tyoe for the master node. Default is `n1-standard-4`.
 - `node_machine_type` (optional): The machine tyoe for the nodes. Default is `n1-standard-4`.
 - `num_nodes` (optional): The number of nodes. Default is `3`.
