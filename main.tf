@@ -36,6 +36,13 @@ data "template_file" "iptables" {
   template = "${file("${format("%s/scripts/iptables.sh.tpl", path.module)}")}"
 }
 
+data "template_file" "shutdown-script" {
+  template = "${file("${format("%s/scripts/shutdown.sh.tpl", path.module)}")}"
+  vars {
+    instance_prefix = "${random_id.instance-prefix.hex}"
+  }
+}
+
 resource "random_id" "token-part-1" {
   byte_length = 3
 }
@@ -120,6 +127,7 @@ module "master-mig" {
   metadata {
     user-data          = "${data.template_cloudinit_config.master.rendered}"
     user-data-encoding = "base64"
+    shutdown-script    = "${data.template_file.shutdown-script.rendered}"
   }
 
   depends_id = "${var.depends_id}"

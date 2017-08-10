@@ -32,9 +32,9 @@ module "k8s" {
 - `num_nodes` (optional): The number of nodes. Default is `3`.
 - `add_tags` (optional): Additional list of tags to add to the nodes.
 - `master_ip` (optional): The internal IP of the master node. Note this must be in the CIDR range of the region and zone. Default is `10.128.0.10`.
-- `pod_cidr` (optional): The CIDR for the pod network. The master will allocate a portion of this subnet for each node. Default is `10.12.0.0/14`.
-- `service_cidr` (optional): The CIDR for the service network. Default is `10.15.240.0/20`.
-- `dns_ip` (optional): The IP of the kube DNS service, must live within the service_cidr. Default is `10.15.240.10`.
+- `pod_cidr` (optional): The CIDR for the pod network. The master will allocate a portion of this subnet for each node. Default is `10.40.0.0/14`.
+- `service_cidr` (optional): The CIDR for the service network. Default is `10.25.240.0/20`.
+- `dns_ip` (optional): The IP of the kube DNS service, must live within the service_cidr. Default is `10.25.240.10`.
 
 
 ### Output variables
