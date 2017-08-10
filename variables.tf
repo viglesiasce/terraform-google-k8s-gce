@@ -71,7 +71,7 @@ variable master_ip {
 
 variable pod_cidr {
   description = "The CIDR for the pod network. The master will allocate a portion of this subnet for each node."
-  default     = "10.42.0.0/14"
+  default     = "10.40.0.0/14"
 }
 
 variable service_cidr {

@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ingress-uid-test
-  namespace: kube-system
-data:
-  provider-uid: ${cluster_uid}
-  uid: ${cluster_uid}
