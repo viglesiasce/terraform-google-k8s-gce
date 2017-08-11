@@ -14,11 +14,13 @@ authorizationModes:
 apiServerCertSANs:
 - 127.0.0.1
 controllerManagerExtraArgs:
+  cluster-name: ${instance_prefix}
   allocate-node-cidrs: "true"
+  cidr-allocator-type: "RangeAllocator"
   configure-cloud-routes: "true"
   cloud-config: /etc/kubernetes/gce.conf
   cluster-cidr: ${pod_cidr}
-  cluster-name: ${instance_prefix}
+  service-cluster-ip-range: ${service_cidr}
   feature-gates: AllAlpha=true,RotateKubeletServerCertificate=false,RotateKubeletClientCertificate=false,ExperimentalCriticalPodAnnotation=true
 EOF
 chmod 0600 /etc/kubernetes/kubeadm.conf

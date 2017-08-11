@@ -2,6 +2,11 @@ variable name {
   description = "The name of the kubernetes cluster. Note that nodes names will be prefixed with `k8s-`"
 }
 
+variable cluster_uid {
+  description = "The cluster uid"
+  default     = ""
+}
+
 variable k8s_version {
   description = "The version of kubernetes to use. See available versions using: `apt-cache madison kubelet`"
   default     = "1.7.3"
@@ -29,6 +34,11 @@ variable compute_image {
 
 variable network {
   description = "The network to deploy to"
+  default     = "default"
+}
+
+variable subnetwork {
+  description = "The subnetwork to deploy to"
   default     = "default"
 }
 

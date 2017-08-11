@@ -25,6 +25,7 @@ module "k8s" {
 - `dashboard_version` (optional): The version tag of the kubernetes dashboard, per the tags in the repo: https://github.com/kubernetes/dashboard. Default is `v1.6.3`.
 - `compute_image` (optional): The project/image to use on the master and nodes. Must be ubuntu or debian 8+ compatible. Default is `ubuntu-os-cloud/ubuntu-1704`.
 - `network` (optional): The network to deploy to. Default is `default`.
+- `subnetwork` (optional): The subnetwork to deploy to. Default is `default`.
 - `region` (optional): The region to create the cluster in. Default is `us-central1`
 - `zone` (optional): The zone to create the cluster in.. Default is `us-central1-f`.
 - `access_config` (optiona): The access config block for the instances. Set to `[]` to remove external IP. Default is `[{}]`

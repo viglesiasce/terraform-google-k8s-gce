@@ -20,7 +20,7 @@ data "template_file" "master-bootstrap" {
     pod_cidr          = "${var.pod_cidr}"
     service_cidr      = "${var.service_cidr}"
     token             = "${random_id.token-part-1.hex}.${random_id.token-part-2.hex}"
-    cluster_uid       = "${random_id.cluster-uid.hex}"
+    cluster_uid       = "${var.cluster_uid == "" ? random_id.cluster-uid.hex : var.cluster_uid}"
     instance_prefix   = "${random_id.instance-prefix.hex}"
   }
 }
@@ -109,11 +109,13 @@ data "template_cloudinit_config" "node" {
 }
 
 module "master-mig" {
-  source            = "github.com/danisla/terraform-google-managed-instance-group"
+  // source            = "github.com/danisla/terraform-google-managed-instance-group"
+  source            = "/Users/disla/Projects/terraform-google-modules/terraform-google-managed-instance-group"
   name              = "${random_id.instance-prefix.hex}-master"
   region            = "${var.region}"
   zone              = "${var.zone}"
   network           = "${var.network}"
+  subnetwork        = "${var.subnetwork}"
   network_ip        = "${var.master_ip}"
   access_config     = "${var.access_config}"
   can_ip_forward    = true
@@ -133,11 +135,13 @@ module "master-mig" {
 }
 
 module "default-pool-mig" {
-  source            = "github.com/danisla/terraform-google-managed-instance-group"
+  // source            = "github.com/danisla/terraform-google-managed-instance-group"
+  source            = "/Users/disla/Projects/terraform-google-modules/terraform-google-managed-instance-group"
   name              = "${random_id.instance-prefix.hex}-default-pool"
   region            = "${var.region}"
   zone              = "${var.zone}"
   network           = "${var.network}"
+  subnetwork        = "${var.subnetwork}"
   access_config     = "${var.access_config}"
   can_ip_forward    = true
   size              = "${var.num_nodes}"
@@ -185,4 +189,28 @@ resource "google_compute_firewall" "k8s-all" {
   }
 
   source_ranges = ["${var.pod_cidr}"]
+}
+
+resource "google_compute_firewall" "vms" {
+  name    = "${random_id.instance-prefix.hex}-vms"
+  network = "${var.network}"
+
+  allow {
+    protocol = "tcp"
+  }
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "udp"
+  }
+
+  source_ranges = ["${compact(list("10.128.0.0/9","${var.subnetwork != "default" ? data.google_compute_subnetwork.subnet.ip_cidr_range : ""}"))}"]
+}
+
+data "google_compute_subnetwork" "subnet" {
+  name   = "${var.subnetwork}"
+  region = "${var.region}"
 }
