@@ -21,6 +21,7 @@ controllerManagerExtraArgs:
   cluster-name: ${instance_prefix}
   feature-gates: AllAlpha=true,RotateKubeletServerCertificate=false,RotateKubeletClientCertificate=false,ExperimentalCriticalPodAnnotation=true
 EOF
+chmod 0600 /etc/kubernetes/kubeadm.conf
 
 kubeadm init --config /etc/kubernetes/kubeadm.conf
 
@@ -37,7 +38,7 @@ data:
 EOF
 
 # Install L7 GLBC controller, path glbc.manifest to support kubeadm cluster.
-curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/ff33e7014a50493ccb9ab780360b087d01b4fd62/cluster/saltbase/salt/l7-gcp/glbc.manifest | \
+curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/v${k8s_version}/cluster/saltbase/salt/l7-gcp/glbc.manifest | \
   sed \
     -e 's|--apiserver-host=http://localhost:8080|--apiserver-host=https://127.0.0.1:6443 --kubeconfig=/etc/kubernetes/admin.conf|g' \
     -e 's|--config-file-path=/etc/gce.conf|--config-file-path=/etc/kubernetes/gce.conf|g' \
@@ -46,10 +47,13 @@ curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/ff33e7014a50493
 chmod 0600 /etc/kubernetes/manifests/glbc.manifest
 
 # Install default http-backend controller
-curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/master/cluster/addons/cluster-loadbalancing/glbc/default-svc-controller.yaml | \
+curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/v${k8s_version}/cluster/addons/cluster-loadbalancing/glbc/default-svc-controller.yaml | \
   kubectl --kubeconfig /etc/kubernetes/admin.conf create -n kube-system -f -
 
 # Install default http-backend service
-curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/master/cluster/addons/cluster-loadbalancing/glbc/default-svc.yaml | \
+curl -sL https://raw.githubusercontent.com/kubernetes/kubernetes/v${k8s_version}/cluster/addons/cluster-loadbalancing/glbc/default-svc.yaml | \
   kubectl --kubeconfig /etc/kubernetes/admin.conf create -n kube-system -f -
 
+# Install dashboard addon
+curl -sL https://raw.githubusercontent.com/kubernetes/dashboard/${dashboard_version}/src/deploy/kubernetes-dashboard.yaml |
+  kubectl --kubeconfig /etc/kubernetes/admin.conf create -n kube-system -f -

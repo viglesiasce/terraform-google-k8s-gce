@@ -7,6 +7,11 @@ variable k8s_version {
   default     = "1.7.3"
 }
 
+variable dashboard_version {
+  description = "The version tag of the kubernetes dashboard, per the tags in the repo: https://github.com/kubernetes/dashboard"
+  default     = "v1.6.3"
+}
+
 variable cni_version {
   description = "The version of the kubernetes cni resources to install. See available versions using: `apt-cache madison kubernetes-cni`"
   default     = "0.5.1"

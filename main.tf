@@ -15,12 +15,13 @@ data "template_file" "master-bootstrap" {
   template = "${file("${format("%s/scripts/master.sh.tpl", path.module)}")}"
 
   vars {
-    k8s_version     = "${var.k8s_version}"
-    pod_cidr        = "${var.pod_cidr}"
-    service_cidr    = "${var.service_cidr}"
-    token           = "${random_id.token-part-1.hex}.${random_id.token-part-2.hex}"
-    cluster_uid     = "${random_id.cluster-uid.hex}"
-    instance_prefix = "${random_id.instance-prefix.hex}"
+    k8s_version       = "${var.k8s_version}"
+    dashboard_version = "${var.dashboard_version}"
+    pod_cidr          = "${var.pod_cidr}"
+    service_cidr      = "${var.service_cidr}"
+    token             = "${random_id.token-part-1.hex}.${random_id.token-part-2.hex}"
+    cluster_uid       = "${random_id.cluster-uid.hex}"
+    instance_prefix   = "${random_id.instance-prefix.hex}"
   }
 }
 
@@ -153,4 +154,35 @@ module "default-pool-mig" {
   }
 
   depends_id = "${module.master-mig.depends_id}"
+}
+
+resource "google_compute_firewall" "k8s-all" {
+  name    = "${random_id.instance-prefix.hex}-all"
+  network = "${var.network}"
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+  }
+
+  allow {
+    protocol = "udp"
+  }
+
+  allow {
+    protocol = "esp"
+  }
+
+  allow {
+    protocol = "ah"
+  }
+
+  allow {
+    protocol = "sctp"
+  }
+
+  source_ranges = ["${var.pod_cidr}"]
 }

@@ -19,9 +19,10 @@ module "k8s" {
 ### Input variables
 
 - `name` (required): The name of the kubernetes cluster. Note that nodes names will be prefixed with `k8s-`.
-- `version` (optional): The version of kubernetes to use. See available versions using: `apt-cache madison kubelet`. Default is `1.7.3`
+- `k8s_version` (optional): The version of kubernetes to use. See available versions using: `apt-cache madison kubelet`. Default is `1.7.3`
 - `cni_version` (optional): The version of the kubernetes cni resources to install. See available versions using: `apt-cache madison kubernetes-cni`. Default is `0.5.1`.
 - `docker_version` (optional): The version of Docker to install. See available versions using: `apt-cache madison docker-ce`. Default is `17.06.0`
+- `dashboard_version` (optional): The version tag of the kubernetes dashboard, per the tags in the repo: https://github.com/kubernetes/dashboard. Default is `v1.6.3`.
 - `compute_image` (optional): The project/image to use on the master and nodes. Must be ubuntu or debian 8+ compatible. Default is `ubuntu-os-cloud/ubuntu-1704`.
 - `network` (optional): The network to deploy to. Default is `default`.
 - `region` (optional): The region to create the cluster in. Default is `us-central1`
@@ -44,7 +45,6 @@ module "k8s" {
 
 ## Resources created
 
-**Figure 1.** *diagram of terraform resources*
-
 - [`module.master-mig`](https://github.com/danisla/terraform-google-managed-instance-group): Managed instance group for the master node.
 - [`module.default-pool-mig`](https://github.com/danisla/terraform-google-managed-instance-group): Managed instance group for the nodes.
+- [`google_compute_firewall.k8s-all`](https://www.terraform.io/docs/providers/google/r/compute_firewall.html): Firewall rule to allow all traffic on the pod network.
