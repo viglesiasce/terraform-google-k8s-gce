@@ -109,8 +109,7 @@ data "template_cloudinit_config" "node" {
 }
 
 module "master-mig" {
-  // source            = "github.com/danisla/terraform-google-managed-instance-group"
-  source            = "/Users/disla/Projects/terraform-google-modules/terraform-google-managed-instance-group"
+  source            = "github.com/danisla/terraform-google-managed-instance-group"
   name              = "${random_id.instance-prefix.hex}-master"
   region            = "${var.region}"
   zone              = "${var.zone}"
@@ -135,8 +134,7 @@ module "master-mig" {
 }
 
 module "default-pool-mig" {
-  // source            = "github.com/danisla/terraform-google-managed-instance-group"
-  source            = "/Users/disla/Projects/terraform-google-modules/terraform-google-managed-instance-group"
+  source            = "github.com/danisla/terraform-google-managed-instance-group"
   name              = "${random_id.instance-prefix.hex}-default-pool"
   region            = "${var.region}"
   zone              = "${var.zone}"
