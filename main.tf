@@ -2,10 +2,12 @@ data "template_file" "core-init" {
   template = "${file("${format("%s/scripts/k8s-core.sh.tpl", path.module)}")}"
 
   vars {
-    dns_ip         = "${var.dns_ip}"
-    docker_version = "${var.docker_version}"
-    k8s_version    = "${var.k8s_version}"
-    cni_version    = "${var.cni_version}"
+    dns_ip          = "${var.dns_ip}"
+    docker_version  = "${var.docker_version}"
+    k8s_version     = "${var.k8s_version}"
+    cni_version     = "${var.cni_version}"
+    tags            = "${random_id.instance-prefix.hex}"
+    instance_prefix = "${random_id.instance-prefix.hex}"
   }
 }
 
@@ -18,7 +20,6 @@ data "template_file" "master-bootstrap" {
     service_cidr    = "${var.service_cidr}"
     token           = "${random_id.token-part-1.hex}.${random_id.token-part-2.hex}"
     cluster_uid     = "${random_id.cluster-uid.hex}"
-    tags            = "${join(",", concat(list("${random_id.instance-prefix.hex}"), var.add_tags))}"
     instance_prefix = "${random_id.instance-prefix.hex}"
   }
 }
@@ -37,10 +38,8 @@ data "template_file" "iptables" {
 }
 
 data "template_file" "shutdown-script" {
+  // Used for clean shutdown and helps with autoscaling.
   template = "${file("${format("%s/scripts/shutdown.sh.tpl", path.module)}")}"
-  vars {
-    instance_prefix = "${random_id.instance-prefix.hex}"
-  }
 }
 
 resource "random_id" "token-part-1" {
@@ -127,7 +126,6 @@ module "master-mig" {
   metadata {
     user-data          = "${data.template_cloudinit_config.master.rendered}"
     user-data-encoding = "base64"
-    shutdown-script    = "${data.template_file.shutdown-script.rendered}"
   }
 
   depends_id = "${var.depends_id}"
@@ -151,7 +149,8 @@ module "default-pool-mig" {
   metadata {
     user-data          = "${data.template_cloudinit_config.node.rendered}"
     user-data-encoding = "base64"
+    shutdown-script    = "${data.template_file.shutdown-script.rendered}"
   }
 
-  depends_id = "${var.depends_id}"
+  depends_id = "${module.master-mig.depends_id}"
 }

@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+curl --retry 5 -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
@@ -30,3 +30,13 @@ Environment="KUBELET_EXTRA_ARGS=--cloud-provider=gce"
 EOF
 
 systemctl daemon-reload
+
+cat <<'EOF' > /etc/kubernetes/gce.conf
+[global]
+node-tags = ${tags}
+node-instance-prefix = ${instance_prefix}
+EOF
+cp /etc/kubernetes/gce.conf /etc/gce.conf
+
+# for GLBC
+touch /var/log/glbc.log

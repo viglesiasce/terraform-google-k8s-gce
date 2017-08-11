@@ -35,11 +35,12 @@ module "k8s" {
 - `pod_cidr` (optional): The CIDR for the pod network. The master will allocate a portion of this subnet for each node. Default is `10.40.0.0/14`.
 - `service_cidr` (optional): The CIDR for the service network. Default is `10.25.240.0/20`.
 - `dns_ip` (optional): The IP of the kube DNS service, must live within the service_cidr. Default is `10.25.240.10`.
-
+- `depends_id` (optional): The ID of a resource that the instance group depends on. This is added as metadata `tf_depends_id` on each instance.
 
 ### Output variables
 
 - `master_ip`: The internal address of the master.
+- `depends_id`: Id of the master managed instance group `depends_id` output variable used for intra-module dependency creation.
 
 ## Resources created
 
