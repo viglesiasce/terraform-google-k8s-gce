@@ -8,7 +8,7 @@ cloudProvider: gce
 token: ${token}
 networking:
   serviceSubnet: ${service_cidr}
-  podSubset: ${pod_cidr}
+  podSubnet: ${pod_cidr}
 authorizationModes:
 - RBAC
 apiServerCertSANs:
