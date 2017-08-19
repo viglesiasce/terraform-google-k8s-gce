@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 
 cat <<EOF > /etc/kubernetes/kubeadm.conf
 apiVersion: kubeadm.k8s.io/v1alpha1
