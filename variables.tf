@@ -9,7 +9,7 @@ variable cluster_uid {
 
 variable k8s_version {
   description = "The version of kubernetes to use. See available versions using: `apt-cache madison kubelet`"
-  default     = "1.7.3"
+  default     = "1.7.4"
 }
 
 variable dashboard_version {
