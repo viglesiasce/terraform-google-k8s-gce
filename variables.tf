@@ -96,17 +96,17 @@ variable master_ip {
 
 variable pod_cidr {
   description = "The CIDR for the pod network. The master will allocate a portion of this subnet for each node."
-  default     = "10.40.0.0/14"
+  default     = "192.168.0.0/16"
 }
 
 variable service_cidr {
   description = "The CIDR for the service network"
-  default     = "10.25.240.0/20"
+  default     = "10.96.0.0/12"
 }
 
 variable dns_ip {
   description = "The IP of the kube DNS service, must live within the service_cidr."
-  default     = "10.25.240.10"
+  default     = "10.96.0.10"
 }
 
 variable depends_id {
