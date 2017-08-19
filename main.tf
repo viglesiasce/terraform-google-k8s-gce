@@ -2,13 +2,13 @@ data "template_file" "core-init" {
   template = "${file("${format("%s/scripts/k8s-core.sh.tpl", path.module)}")}"
 
   vars {
-    dns_ip          = "${var.dns_ip}"
-    docker_version  = "${var.docker_version}"
-    k8s_version     = "${var.k8s_version}"
-    cni_version     = "${var.cni_version}"
-    tags            = "${random_id.instance-prefix.hex}"
-    instance_prefix = "${random_id.instance-prefix.hex}"
-    pod_network_type  = "${var.pod_network_type}"
+    dns_ip           = "${var.dns_ip}"
+    docker_version   = "${var.docker_version}"
+    k8s_version      = "${var.k8s_version}"
+    cni_version      = "${var.cni_version}"
+    tags             = "${random_id.instance-prefix.hex}"
+    instance_prefix  = "${random_id.instance-prefix.hex}"
+    pod_network_type = "${var.pod_network_type}"
   }
 }
 
