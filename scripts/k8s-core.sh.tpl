@@ -21,10 +21,15 @@ sudo apt-get install -y \
   kubectl=${k8s_version}* \
   kubernetes-cni=${cni_version}*
 
+network_plugin=kubenet
+if [ "${pod_network_type}" == "calico" ]; then
+  network_plugin=cni
+fi
+
 # Drop in config for kubenet and cloud provider
 cat >/etc/systemd/system/kubelet.service.d/20-gcenet.conf <<EOF
 [Service]
-Environment="KUBELET_NETWORK_ARGS=--network-plugin=kubenet --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
+Environment="KUBELET_NETWORK_ARGS=--network-plugin=$${network_plugin} --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
 Environment="KUBELET_DNS_ARGS=--cluster-dns=${dns_ip} --cluster-domain=cluster.local"
 Environment="KUBELET_EXTRA_ARGS=--cloud-provider=gce"
 EOF

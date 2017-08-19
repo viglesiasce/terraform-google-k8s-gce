@@ -27,6 +27,11 @@ variable docker_version {
   default     = "17.06.0"
 }
 
+variable calico_version {
+  description = "Version of Calico to install for pod networking."
+  default     = "2.4"
+}
+
 variable compute_image {
   description = "The project/image to use on the master and nodes. Must be ubuntu or debian 8+ compatible."
   default     = "ubuntu-os-cloud/ubuntu-1704"
@@ -35,6 +40,11 @@ variable compute_image {
 variable network {
   description = "The network to deploy to"
   default     = "default"
+}
+
+variable pod_network_type {
+  description = "The type of networking to use for inter-pod traffic. Either kubenet or calico."
+  default     = "kubenet"
 }
 
 variable subnetwork {
