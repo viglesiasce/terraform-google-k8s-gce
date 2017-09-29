@@ -209,6 +209,7 @@ resource "google_compute_firewall" "vms" {
 }
 
 data "google_compute_subnetwork" "subnet" {
-  name   = "${var.subnetwork}"
-  region = "${var.region}"
+  name    = "${var.subnetwork}"
+  project = "${var.project}"
+  region  = "${var.region}"
 }
