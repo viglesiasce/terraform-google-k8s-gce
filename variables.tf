@@ -42,6 +42,10 @@ variable subnetwork {
   default     = "default"
 }
 
+variable project {
+  description = "The project to deploy to"
+}
+
 variable region {
   description = "The region to create the cluster in."
   default     = "us-central1"
