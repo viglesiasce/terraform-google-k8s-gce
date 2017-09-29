@@ -9,7 +9,7 @@ variable cluster_uid {
 
 variable k8s_version {
   description = "The version of kubernetes to use. See available versions using: `apt-cache madison kubelet`"
-  default     = "1.7.3"
+  default     = "1.7.4"
 }
 
 variable dashboard_version {
@@ -27,6 +27,11 @@ variable docker_version {
   default     = "17.06.0"
 }
 
+variable calico_version {
+  description = "Version of Calico to install for pod networking."
+  default     = "2.4"
+}
+
 variable compute_image {
   description = "The project/image to use on the master and nodes. Must be ubuntu or debian 8+ compatible."
   default     = "ubuntu-os-cloud/ubuntu-1704"
@@ -35,6 +40,11 @@ variable compute_image {
 variable network {
   description = "The network to deploy to"
   default     = "default"
+}
+
+variable pod_network_type {
+  description = "The type of networking to use for inter-pod traffic. Either kubenet or calico."
+  default     = "kubenet"
 }
 
 variable subnetwork {
@@ -90,17 +100,17 @@ variable master_ip {
 
 variable pod_cidr {
   description = "The CIDR for the pod network. The master will allocate a portion of this subnet for each node."
-  default     = "10.40.0.0/14"
+  default     = "192.168.0.0/16"
 }
 
 variable service_cidr {
   description = "The CIDR for the service network"
-  default     = "10.25.240.0/20"
+  default     = "10.96.0.0/12"
 }
 
 variable dns_ip {
   description = "The IP of the kube DNS service, must live within the service_cidr."
-  default     = "10.25.240.10"
+  default     = "10.96.0.10"
 }
 
 variable depends_id {

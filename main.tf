@@ -2,12 +2,13 @@ data "template_file" "core-init" {
   template = "${file("${format("%s/scripts/k8s-core.sh.tpl", path.module)}")}"
 
   vars {
-    dns_ip          = "${var.dns_ip}"
-    docker_version  = "${var.docker_version}"
-    k8s_version     = "${var.k8s_version}"
-    cni_version     = "${var.cni_version}"
-    tags            = "${random_id.instance-prefix.hex}"
-    instance_prefix = "${random_id.instance-prefix.hex}"
+    dns_ip           = "${var.dns_ip}"
+    docker_version   = "${var.docker_version}"
+    k8s_version      = "${var.k8s_version}"
+    cni_version      = "${var.cni_version}"
+    tags             = "${random_id.instance-prefix.hex}"
+    instance_prefix  = "${random_id.instance-prefix.hex}"
+    pod_network_type = "${var.pod_network_type}"
   }
 }
 
@@ -17,11 +18,13 @@ data "template_file" "master-bootstrap" {
   vars {
     k8s_version       = "${var.k8s_version}"
     dashboard_version = "${var.dashboard_version}"
+    calico_version    = "${var.calico_version}"
     pod_cidr          = "${var.pod_cidr}"
     service_cidr      = "${var.service_cidr}"
     token             = "${random_id.token-part-1.hex}.${random_id.token-part-2.hex}"
     cluster_uid       = "${var.cluster_uid == "" ? random_id.cluster-uid.hex : var.cluster_uid}"
     instance_prefix   = "${random_id.instance-prefix.hex}"
+    pod_network_type  = "${var.pod_network_type}"
   }
 }
 
